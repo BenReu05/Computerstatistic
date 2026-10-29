@@ -48,3 +48,22 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# History and RStudio files
+.Rhistory
+.RData
+.RDataTmp
+.Rproj.user/
+
+# Rendered files and targets cache
+.quarto/
+_targets/
+
+# Intermediate data files
+data/processed/*.rds
+*.csv.gz
+
+# Local renv library (dependencies stay local; renv.lock tracks them)
+renv/library/
+renv/local/
+renv/staging/
