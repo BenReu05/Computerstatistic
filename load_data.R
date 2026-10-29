@@ -1,6 +1,5 @@
 
-file_path <- "/Users/ben/Library/CloudStorage/OneDrive-Persönlich/Ben/TU Wien/Semester5/compstat/diabetes+130-us+hospitals+for+years+1999-2008/diabetic_data.csv"
-
+file_path <- "https://raw.githubusercontent.com/BenReu05/Computerstatistic/main/diabetes.csv"
 
 diabetes <- read.csv(file_path,
                      stringsAsFactors = FALSE,
