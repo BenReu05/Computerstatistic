@@ -1,0 +1,65 @@
+---
+title: "UCI Diabetes 130-US hospitals"
+subtitle: "Preliminary EDA"
+author: "Tristan Daha, Ben Reuter, Julian Rinninger, Paul Windisch"
+date: "2026-11-01"
+output:
+  pdf_document:
+    toc: true
+    latex_engine: xelatex
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Loading of data
+```{r,include = FALSE}
+library(readr)
+library(here)
+file_path <- here("data", "raw", "diabetic_data.csv")
+
+
+raw_df <- read_csv(file_path,
+                   na = c("?", "NA", ""),
+                   show_col_types = FALSE)
+
+```
+
+# Handling of "Not Available" data
+```{r}
+#percentage of NAs for every column
+na_percent <- colMeans(is.na(raw_df)) * 100
+sort(na_percent[na_percent > 0], decreasing = TRUE)
+
+```
+
+| Variable          | Missingness | Strategy          | Methodological Rationale |
+|:------------------|:------------|:------------------|:--------------------------|
+| weight            | >96%        | Column Omission   | Unusable feature; imputation introduces noise. |
+| payer_code        | ~40%        | Column Omission   | Administrative billing category, not clinical. |
+| medical_specialty | ~49%        | Recode to "Missing" | Informative missingness (proxy for ER admission). |
+| race              | ~2%         | Row Omission      | Complete-case filtering; preserves >97% of sample. |
+| diag_1, diag_2, diag_3           | <1%         | Row Omission      | Complete-case filtering on essential clinical target. |
+
+# Data inbalance
+```{r}
+raw_df$readmitted_30d <- ifelse(raw_df$readmitted == "<30", 1L, 0L)
+N_readmitted<-sum(raw_df$readmitted_30d)
+fraction_readmitted<-mean(raw_df$readmitted_30d, na.rm = TRUE)
+
+```
+
+# Unique patients
+```{r}
+n_unique_patients <- length(unique(raw_df$patient_nbr))
+visit_counts <- table(raw_df$patient_nbr)
+visit_distribution <- table(visit_counts)
+print(head(visit_distribution, 5))
+```
+
+
+
+
